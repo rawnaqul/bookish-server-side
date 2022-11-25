@@ -50,6 +50,13 @@ async function run() {
             res.send(users);
         });
 
+        //ADD PRODUCT
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            const newProducts = await productsCollection.insertOne(product);
+            res.send(newProducts);
+        });
+
 
     }
     finally { }

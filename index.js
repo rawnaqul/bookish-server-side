@@ -24,7 +24,9 @@ async function run() {
     try {
         const categoryCollection = client.db('bookish').collection('categories');
         const productsCollection = client.db('bookish').collection('products');
+        const usersCollection = client.db('bookish').collection('users');
 
+        //CATEGORY DATA LOAD
         app.get('/categories', async (req, res) => {
             const query = {};
             const cursor = categoryCollection.find(query);
@@ -32,6 +34,7 @@ async function run() {
             res.send(categories)
         })
 
+        //DATA LOAD UNDER CATEGORY ID
         app.get('/products/:name', async (req, res) => {
             const categoryName = req.params.name;
             const query = { category: categoryName };
@@ -39,6 +42,14 @@ async function run() {
             const products = await cursor.toArray();
             res.send(products)
         })
+
+        //ADD USER
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const users = await usersCollection.insertOne(user);
+            res.send(users);
+        });
+
 
     }
     finally { }

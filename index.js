@@ -25,6 +25,7 @@ async function run() {
         const categoryCollection = client.db('bookish').collection('categories');
         const productsCollection = client.db('bookish').collection('products');
         const usersCollection = client.db('bookish').collection('users');
+        const bookingCollection = client.db('bookish').collection('booking');
 
         //CATEGORY DATA LOAD
         app.get('/categories', async (req, res) => {
@@ -56,6 +57,23 @@ async function run() {
             const newProducts = await productsCollection.insertOne(product);
             res.send(newProducts);
         });
+
+
+        //BOOKING INFO
+        app.post('/bookinginfo', async (req, res) => {
+            const booking = req.body;
+            const newBooking = await bookingCollection.insertOne(booking);
+            res.send(newBooking);
+        });
+
+
+        //GET PRODUCTS BY USER
+        app.get('/products', async (req, res) => {
+            const mail = req.query.email;
+            const query = { email: mail };
+            const products = await productsCollection.find(query).toArray();
+            res.send(products);
+        })
 
 
     }

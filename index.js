@@ -83,6 +83,21 @@ async function run() {
             res.send(products);
         })
 
+        // PRODUCT STATUS CHANGE
+        app.patch('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const newStatus = req.body.status;
+            const status = { upsert: true };
+            const updatedStatus = {
+                $set: {
+                    status: newStatus,
+                }
+            }
+            const result = await productsCollection.updateOne(filter, updatedStatus, status);
+            res.send(result);
+        })
+
 
     }
     finally { }

@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 require('dotenv').config();
 const app = express();
@@ -58,6 +58,14 @@ async function run() {
             res.send(newProducts);
         });
 
+        //REMOVE PRODUCT
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await productsCollection.deleteOne(query);
+            res.send(result);
+        })
+
 
         //BOOKING INFO
         app.post('/bookinginfo', async (req, res) => {
@@ -87,6 +95,6 @@ run().catch(err => console.error(err));
 
 //SERVER-RUN
 app.get('/', async (req, res) => {
-    res.send('Bookish server side is running')
+    res.send('Bookish server side is jore-shore running')
 })
 app.listen(port, () => console.log(`Bookish server side isss running on port ${port}`))

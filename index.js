@@ -136,7 +136,7 @@ async function run() {
             // const adStatus = req.query.adStatus;
             // console.log('ad ');
             // console.log(adStatus);
-            const query = { adStatus: true }
+            const query = { adStatus: true, status: true }
 
             console.log(query);
             const productsFor = await productsCollection.find(query).toArray();

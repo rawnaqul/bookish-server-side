@@ -99,6 +99,24 @@ async function run() {
         })
 
 
+        // PRODUCT ADVERTISEMENT ISSUE
+        app.patch('/advertise/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const filter = { _id: ObjectId(id) };
+            const newStatus = req.body.adStatus;
+            console.log(newStatus);
+            const status = { upsert: true };
+            const updatedStatus = {
+                $set: {
+                    adStatus: newStatus,
+                }
+            }
+            const result = await productsCollection.updateOne(filter, updatedStatus, status);
+            res.send(result);
+        })
+
+
     }
     finally { }
 }

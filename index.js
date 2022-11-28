@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const jwt = require('jsonwebtoken')
 const port = process.env.PORT || 5000;
 require('dotenv').config();
 const app = express();
@@ -26,6 +27,17 @@ async function run() {
         const productsCollection = client.db('bookish').collection('products');
         const usersCollection = client.db('bookish').collection('users');
         const bookingCollection = client.db('bookish').collection('booking');
+
+        app.get('/jwt', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const user = await usersCollection.findOne(query);
+            if (user) {
+                const token = jwt.sign({ email }, process.env.ACESS_TOKEN,)
+                return res.send({ accessToken: token })
+            }
+            res.status(403).send('unauthorized User')
+        })
 
         //CATEGORY DATA LOAD
         app.get('/categories', async (req, res) => {

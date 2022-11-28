@@ -78,7 +78,11 @@ async function run() {
         //GET PRODUCTS BY USER
         app.get('/products', async (req, res) => {
             const mail = req.query.email;
-            const query = { email: mail };
+            // const query = { email: mail };
+            let query = {}
+            if (mail) {
+                query = { email: mail }
+            }
             const products = await productsCollection.find(query).toArray();
             res.send(products);
         })
@@ -105,7 +109,6 @@ async function run() {
             console.log(id);
             const filter = { _id: ObjectId(id) };
             const newStatus = req.body.adStatus;
-            console.log(newStatus);
             const status = { upsert: true };
             const updatedStatus = {
                 $set: {
@@ -116,7 +119,17 @@ async function run() {
             res.send(result);
         })
 
+        //GET ALL PRODUCTS IN HOMEPAGE TO ADVERTISE
+        app.get('/advertised', async (req, res) => {
+            // const adStatus = req.query.adStatus;
+            // console.log('ad ');
+            // console.log(adStatus);
+            const query = { adStatus: true }
 
+            console.log(query);
+            const productsFor = await productsCollection.find(query).toArray();
+            res.send(productsFor);
+        })
     }
     finally { }
 }

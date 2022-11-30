@@ -32,12 +32,24 @@ async function run() {
             const email = req.query.email;
             const query = { email: email };
             const user = await usersCollection.findOne(query);
+            console.log("back-end index.js", user);
             if (user) {
-                const token = jwt.sign({ email }, process.env.ACESS_TOKEN,)
+                const token = jwt.sign({ email }, process.env.ACCESS_TOKEN)
+                console.log(token);
                 return res.send({ accessToken: token })
             }
             res.status(403).send('unauthorized User')
-        })
+        });
+
+
+        //VERIFICATION
+        app.get('/user/:email', async (req, res) => {
+            const userEmail = req.params.email;
+            const query = { email: userEmail };
+            const user = await usersCollection.findOne(query);
+            res.send({ userRole: user.userRole });
+        });
+
 
         //CATEGORY DATA LOAD
         app.get('/categories', async (req, res) => {
@@ -138,10 +150,28 @@ async function run() {
             // console.log(adStatus);
             const query = { adStatus: true, status: true }
 
-            console.log(query);
+            // console.log("all products api", query);
             const productsFor = await productsCollection.find(query).toArray();
             res.send(productsFor);
         })
+
+
+        //ALL USER DATA BASED ON EMAIL
+        app.get('/alluser', async (req, res) => {
+            const mail = req.query.email;
+            console.log(mail);
+            // const query = { email: mail };
+            let query = {}
+            if (mail) {
+                query = { email: mail }
+            }
+            const oneUser = await usersCollection.find(query).toArray();
+            console.log(oneUser);
+            res.send(oneUser);
+
+        })
+
+
     }
     finally { }
 }

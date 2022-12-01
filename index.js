@@ -35,19 +35,20 @@ async function run() {
             console.log("back-end index.js", user);
             if (user) {
                 const token = jwt.sign({ email }, process.env.ACCESS_TOKEN)
-                console.log(token);
                 return res.send({ accessToken: token })
             }
             res.status(403).send('unauthorized User')
         });
 
 
-        //VERIFICATION
+        //VERIFICATION=====================================================================Verification
         app.get('/user/:email', async (req, res) => {
             const userEmail = req.params.email;
             const query = { email: userEmail };
+            console.log(query);
             const user = await usersCollection.findOne(query);
-            res.send({ userRole: user.userRole });
+            console.log(user.userRole);
+            res.send(user);
         });
 
 
@@ -71,6 +72,7 @@ async function run() {
         //ADD USER
         app.post('/users', async (req, res) => {
             const user = req.body;
+            console.log(user);
             const users = await usersCollection.insertOne(user);
             res.send(users);
         });

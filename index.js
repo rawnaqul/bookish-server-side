@@ -28,6 +28,8 @@ async function run() {
         const usersCollection = client.db('bookish').collection('users');
         const bookingCollection = client.db('bookish').collection('booking');
 
+        // JWT 
+
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
             const query = { email: email };
@@ -41,7 +43,7 @@ async function run() {
         });
 
 
-        //VERIFICATION=====================================================================Verification
+        //VERIFICATION===========================
         app.get('/user/:email', async (req, res) => {
             const userEmail = req.params.email;
             const query = { email: userEmail };
@@ -160,16 +162,10 @@ async function run() {
 
         //ALL USER DATA BASED ON EMAIL
         app.get('/alluser', async (req, res) => {
-            const mail = req.query.email;
-            console.log(mail);
-            // const query = { email: mail };
-            let query = {}
-            if (mail) {
-                query = { email: mail }
-            }
-            const oneUser = await usersCollection.find(query).toArray();
-            console.log(oneUser);
-            res.send(oneUser);
+            const role = req.query.userRole;
+            const query = { userRole: role }
+            const user = await usersCollection.find(query).toArray();
+            res.send(user);
 
         })
 
